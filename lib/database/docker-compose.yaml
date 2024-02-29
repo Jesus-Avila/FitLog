@@ -1,0 +1,22 @@
+version: '3'
+services:
+  db:
+    image: postgres:alpine
+    restart: unless-stopped
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: dev
+      POSTGRES_PASSWORD: postgres
+
+    volumes:
+      - pg_data_new:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'postgres', '-d', 'dev']
+      interval: 1s
+      retries: 30
+      timeout: 1s
+
+volumes:
+  pg_data_new:
